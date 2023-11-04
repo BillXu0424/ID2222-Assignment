@@ -1,0 +1,1 @@
+Machine learning models have become more sophisticated. They are able to predict outcomes with a high degree of accuracy from data. These models need large datasets for training and can identify complex patterns. Nonetheless, tuning their hyperparameters carefully is necessary for optimal performance.
