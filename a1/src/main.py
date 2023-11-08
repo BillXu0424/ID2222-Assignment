@@ -1,6 +1,7 @@
 import itertools
 import numpy as np
 import argparse
+import time
 
 from textLoader import TextLoader
 from shingling import Shingling
@@ -8,7 +9,6 @@ from minHashing import MinHashing
 from lsh import LSH
 from compareSets import CompareSets
 from compareSignatures import CompareSignatures
-
 
 if __name__ == '__main__':
     # parse arguments
@@ -44,6 +44,8 @@ if __name__ == '__main__':
     shingling_result = {}
     minHashing_result = {}
 
+    part1_start = time.time()
+
     for item in order:
         data1, data2 = item
 
@@ -51,6 +53,8 @@ if __name__ == '__main__':
         shingling_result[f'{data1} & {data2}'] = CompareSets.sim(sl_set_1, sl_set_2)
 
         minHashing_result[f'{data1} & {data2}'] = CompareSignatures.sim(mh.gen_sig(sl_set_1), mh.gen_sig(sl_set_2))
+
+    part1_end = time.time()
 
     shingling_result = sorted(shingling_result.items(), key=lambda x: x[1], reverse=True)
     print(f'Jaccard sim of {K} shinglings:\n{shingling_result}\n\n\n')
@@ -63,6 +67,8 @@ if __name__ == '__main__':
     sl_list = []
     sig_list = []
     i = 0
+
+    lsh_start = time.time()
 
     lsh = LSH(t=0.1, band=5)
 
@@ -82,6 +88,8 @@ if __name__ == '__main__':
     for tp in candidate_pairs:
         candidate_pairs_name.add((doc_idx[tp[0]], doc_idx[tp[1]]))
 
+    lsh_end = time.time()
+
     print(f'Candidate pairs:{candidate_pairs_name}')
 
     sim_pairs = lsh.find_sim_pairs(candidate_pairs, sl_list)
@@ -89,4 +97,7 @@ if __name__ == '__main__':
     for tp in sim_pairs:
         sim_pairs_name.add((doc_idx[tp[0]], doc_idx[tp[1]]))
 
-    print(f'Sim pairs:{sim_pairs_name}')
+    print(f'Sim pairs:{sim_pairs_name}\n')
+
+    print(f'time cost for calculating shingling and minHashing: {part1_end - part1_start:.3f}')
+    print(f'time cost for LSH: {lsh_end - lsh_start:.3f}\n')
