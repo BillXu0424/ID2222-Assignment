@@ -18,6 +18,11 @@ if __name__ == '__main__':
 
     apriori = Apriori(SUPPORT, DATASET_PATH)
     ls = apriori.proceed()
+    for i, l in enumerate(ls):
+        print(f"i: {i}, length: {len(l)}")
+        print("## display ##")
+        print(l.keys())
+
     frequent_sets = apriori.generate_frequent_sets(ls)
 
     rule_finder = RuleFinder(ls, confidence=CONFIDENCE)

@@ -40,7 +40,7 @@ class Apriori:
                 [
                     item_set
                     for basket in self._baskets
-                    for item_set in tuple(combinations(basket, i))
+                    for item_set in tuple(combinations(sorted(basket), i))
                     if item_set in c
                 ]
             )

@@ -18,8 +18,7 @@ class RuleFinder:
     def find_rules(self, frequent_sets):
         start_time = time.time()
 
-        confident_rules = dict()
-        confident_scores = dict()
+        confident_rules = list()
         unconfident_rules = list()
 
         for itemset in frequent_sets:
@@ -43,14 +42,14 @@ class RuleFinder:
                 cur_conf = support_I / support_A
 
                 if cur_conf >= self._confidence:  # if confident rules
-                    confident_rules[tuple(sorted(subset))] = [tuple(sorted(set(itemset) - subset)), cur_conf]
+                    confident_rules.append([tuple(sorted(subset)), tuple(sorted(set(itemset) - subset)), cur_conf])
                 else:  # if unconfident rules
                     unconfident_rules.append(subset)
 
         # visualization
         print("confident rules:")
-        for i, (key, value) in enumerate(confident_rules.items()):
-            print(f'rule {i}: {key} ===> {value[0]}, score: {value[1]:.3f}')
+        for i, sublist in enumerate(confident_rules):
+            print(f'rule {i}: {sublist[0]} ===> {sublist[1]}, score: {sublist[2]:.3f}')
 
         # calculating time cost
         end_time = time.time()
