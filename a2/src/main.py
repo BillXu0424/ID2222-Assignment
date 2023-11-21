@@ -19,7 +19,7 @@ if __name__ == '__main__':
     apriori = Apriori(SUPPORT, DATASET_PATH)
     ls = apriori.proceed()
     for i, l in enumerate(ls):
-        print(f"i: {i}, length: {len(l)}")
+        print(f"i: {i + 1}, length: {len(l)}")
         print("## display ##")
         print(l.keys())
 
