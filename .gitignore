@@ -164,3 +164,8 @@ dataset/
 
 # paper
 paper/
+
+# a5
+/a5/output
+/a5/target
+/a5/graphs
