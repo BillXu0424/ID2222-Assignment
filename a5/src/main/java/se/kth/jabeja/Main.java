@@ -1,25 +1,22 @@
 package se.kth.jabeja;
 
 import org.apache.log4j.Logger;
+import se.kth.jabeja.config.Config;
 import se.kth.jabeja.io.CLI;
 import se.kth.jabeja.io.GraphReader;
-import se.kth.jabeja.config.Config;
 import se.kth.jabeja.rand.RandNoGenerator;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 
 
 public class Main {
     final static Logger logger = Logger.getLogger(Main.class);
-
+    HashMap<Integer, Node> graph;
     /**
      * Holds all the configurations parameters.
      */
     private Config config;
-
-    HashMap<Integer, Node> graph;
 
     public static void main(String[] args) throws IOException {
         new Main().startApp(args);

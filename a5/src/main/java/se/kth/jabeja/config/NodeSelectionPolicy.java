@@ -8,9 +8,11 @@ public enum NodeSelectionPolicy {
     HYBRID("HYBRID"),
     LOCAL("LOCAL");
     String name;
+
     NodeSelectionPolicy(String name) {
         this.name = name;
     }
+
     @Override
     public String toString() {
         return name;
