@@ -2,8 +2,8 @@ package se.kth.jabeja.config;
 
 public enum AnnealingPolicy {
     DEFAULT("DEFAULT"),
-    EXPONENTIAL("EXPONENTIAL");
-
+    EXPONENTIAL("EXPONENTIAL"),
+    IMPROV_EXPONENTIAL("IMPROV_EXPONENTIAL");
     String name;
 
     AnnealingPolicy(String name) {

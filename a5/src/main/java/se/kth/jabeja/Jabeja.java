@@ -58,7 +58,7 @@ public class Jabeja {
                 T -= config.getDelta();
             if (T < 1)
                 T = 1;
-        } else{
+        } else {
             if (T > config.getMinTemperature()) {
                 T *= config.getDecay();
             }
@@ -128,9 +128,16 @@ public class Jabeja {
                         highestBenefit = benefit;
                     }
                 }
-            } else {
+            } else if (config.getAnnealingPolicy() == AnnealingPolicy.EXPONENTIAL) {
                 double benefit = right - left;
                 double ap = accProb(highestBenefit, benefit);
+                if (ap < RandNoGenerator.nextDouble()) {
+                    bestPartner = partner;
+                    highestBenefit = benefit;
+                }
+            } else if (config.getAnnealingPolicy() == AnnealingPolicy.IMPROV_EXPONENTIAL) {
+                double benefit = right - left;
+                double ap = accProbImprov(highestBenefit, benefit);
                 if (ap < RandNoGenerator.nextDouble()) {
                     bestPartner = partner;
                     highestBenefit = benefit;
@@ -146,6 +153,11 @@ public class Jabeja {
     private double accProb(double oldBenefit, double newBenefit) {
 //        return Math.exp((oldBenefit - newBenefit) / T);
         return Math.log(1 + Math.exp((oldBenefit - newBenefit) / T));
+    }
+
+    private double accProbImprov(double oldBenefit, double newBenefit) {
+        double benefitChange = (oldBenefit - newBenefit) / T;
+        return Math.log(1 + Math.exp(benefitChange));
     }
 
     /**
