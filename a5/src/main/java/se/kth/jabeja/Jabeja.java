@@ -58,7 +58,7 @@ public class Jabeja {
                 T -= config.getDelta();
             if (T < 1)
                 T = 1;
-        } else{
+        } else {
             if (T > config.getMinTemperature()) {
                 T *= config.getDecay();
             }
@@ -110,27 +110,34 @@ public class Jabeja {
         Node bestPartner = null;
         float alpha = config.getAlpha();
         double highestBenefit = 0;
-        float dpcp = nodep.getDegree() - getDegree(nodep, nodep.getColor());
+        float dpcp = getDegree(nodep, nodep.getColor());
 
         for (Integer partnerId : nodes) {
             Node partner = entireGraph.get(partnerId);
-            float dqcq = partner.getDegree() - getDegree(partner, partner.getColor());
-            float dpcq = partner.getDegree() - getDegree(nodep, partner.getColor());
-            float dqcp = partner.getDegree() - getDegree(partner, nodep.getColor());
+            float dqcq = getDegree(partner, partner.getColor());
+            float dpcq = getDegree(nodep, partner.getColor());
+            float dqcp = getDegree(partner, nodep.getColor());
             double left = Math.pow(dpcp, alpha) + Math.pow(dqcq, alpha);
             double right = Math.pow(dpcq, alpha) + Math.pow(dqcp, alpha);
 
             if (config.getAnnealingPolicy() == AnnealingPolicy.DEFAULT) {
-                double benefit = left * T - right;
+                double benefit = right * T - left;
                 if (benefit > 0) {
                     if (benefit > highestBenefit) {
                         bestPartner = partner;
                         highestBenefit = benefit;
                     }
                 }
-            } else {
-                double benefit = left - right;
+            } else if (config.getAnnealingPolicy() == AnnealingPolicy.EXPONENTIAL) {
+                double benefit = right - left;
                 double ap = accProb(highestBenefit, benefit);
+                if (ap < RandNoGenerator.nextDouble()) {
+                    bestPartner = partner;
+                    highestBenefit = benefit;
+                }
+            } else if (config.getAnnealingPolicy() == AnnealingPolicy.IMPROV_EXPONENTIAL) {
+                double benefit = right - left;
+                double ap = accProbImprov(highestBenefit, benefit);
                 if (ap < RandNoGenerator.nextDouble()) {
                     bestPartner = partner;
                     highestBenefit = benefit;
@@ -145,6 +152,11 @@ public class Jabeja {
 
     private double accProb(double oldBenefit, double newBenefit) {
         return Math.exp((oldBenefit - newBenefit) / T);
+    }
+
+    private double accProbImprov(double oldBenefit, double newBenefit) {
+        double benefitChange = (oldBenefit - newBenefit) / T;
+        return Math.log(1 + Math.exp(benefitChange));
     }
 
     /**

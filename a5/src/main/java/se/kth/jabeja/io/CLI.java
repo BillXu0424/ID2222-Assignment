@@ -48,7 +48,7 @@ public class CLI {
     @Option(name = "-nodeSelectionPolicy", usage = "Node selection policy. Supported, RANDOM, LOCAL, HYBRID")
     private String NODE_SELECTION_POLICY = "HYBRID";
     private NodeSelectionPolicy nodeSelectionPolicy = NodeSelectionPolicy.HYBRID;
-    @Option(name = "-annealingPolicy", usage = "Different annealing policy. Supported, DEFAULT, EXPONENTIAL")
+    @Option(name = "-annealingPolicy", usage = "Different annealing policy. Supported, DEFAULT, EXPONENTIAL, or IMPROV_EXPONENTIAL")
     private String ANNEALING_POLICY = "DEFAULT";
     private AnnealingPolicy annealingPolicy = AnnealingPolicy.DEFAULT;
 
@@ -80,9 +80,10 @@ public class CLI {
 
             if (ANNEALING_POLICY.compareToIgnoreCase(AnnealingPolicy.DEFAULT.toString()) == 0) {
                 annealingPolicy = AnnealingPolicy.DEFAULT;
-            }
-            else if (ANNEALING_POLICY.compareToIgnoreCase(AnnealingPolicy.EXPONENTIAL.toString()) == 0) {
+            } else if (ANNEALING_POLICY.compareToIgnoreCase(AnnealingPolicy.EXPONENTIAL.toString()) == 0) {
                 annealingPolicy = AnnealingPolicy.EXPONENTIAL;
+            } else if (ANNEALING_POLICY.compareToIgnoreCase(AnnealingPolicy.IMPROV_EXPONENTIAL.toString()) == 0) {
+                annealingPolicy = AnnealingPolicy.IMPROV_EXPONENTIAL;
             } else {
                 throw new IllegalArgumentException("Annealing policy is not supported");
             }
